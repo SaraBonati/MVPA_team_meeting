@@ -15,3 +15,6 @@ def app():
     f = open(os.path.join(tdir,'home_text.md'), 'r')
     fileString = f.read()
     st.markdown(fileString,unsafe_allow_html=True)
+
+    if st.button('PS: click here for some free balloons!'):
+        st.balloons()
