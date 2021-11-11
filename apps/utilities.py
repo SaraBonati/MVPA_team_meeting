@@ -1,46 +1,66 @@
-# In this script we code a simple Classifier class with methods dedicated
-# to generating data, training a classifier from the ones offered in sklearn,
-# and change classifier parameters as well as performing grid search for parameters.
-# Author: Sara Bonati
-# Plasticity team meeting - 19/11/2021
+# In this script we code utility classes to support presentation slides
+#----------------------------------------------------------------------
+# Author @ Sara Bonati - Plasticity team meeting - 22/11/2021
+#----------------------------------------------------------------------
 
 import numpy as np
-from scipy.stats import multivariate_normal
 import matplotlib.pyplot as plt
+plt.style.use('ggplot')
 import matplotlib.gridspec as gridspec
+import seaborn as sns
 import plotly.express as px
 import os
 import pandas as pd
+from sklearn.datasets import load_diabetes,load_breast_cancer,fetch_california_housing
+
+# PREPROCESSING 
+#------------------------------------------------------------------------
+class Preprocessing:
+    def __init__(self,dataset_name):
+        self.df_name = dataset_name 
+    
+    def load_dataset(self):
+        load_data = {'Diabetes Dataset':load_diabetes(as_frame=True),
+                     'California Housing Dataset':fetch_california_housing(as_frame=True),
+                     'Breast Cancer Wisconsin Dataset':load_breast_cancer(as_frame=True)}
+
+        self.data = load_data[self.df_name]['data']
+        self.target = load_data[self.df_name]['target'] 
+
+        if self.df_name == 'Diabetes Dataset':
+            renaming_dict={'age':'age','sex':'sex','bmi':'bmi','bp':'avg_bp','s1':'tc',
+                            's2': 'ldl','s3': 'hdl','s4':'tch','s5':'ltg','s6':'glu'}
+            self.data.rename(renaming_dict,in_place=True)
+
+        return self.data,self.target
+    
+    def plot_corr_matrix(self):
+        # Compute the correlation matrix
+        corr = self.data.corr()
+        # Generate a mask for the upper triangle
+        mask = np.triu(np.ones_like(corr, dtype=bool))
+        # Set up the matplotlib figure
+        fig = plt.figure(figsize=(11, 9))
+        gs = gridspec.GridSpec(1,1)
+        ax={}
+        ax[0] = fig.add_subplot(gs[0,0])
+        # Draw the heatmap with the mask and correct aspect ratio
+        sns.heatmap(corr, mask=mask, cmap='coolwarm', vmax=.3, center=0,
+            square=True, linewidths=.5, cbar_kws={"shrink": .5},ax=ax[0])
+        
+        return fig
 
 
-
+# MODEL TRAINING - TESTING 
+#------------------------------------------------------------------------
 class Classifier:
 
     def __init__(self,name):
         self.name = name 
     
     def generate_data(self,x1,y1,x2,y2):
-        self.rv1 = multivariate_normal([x1,y1], [[2.0, 0.3], [0.3, 0.5]])
-        self.rv2 = multivariate_normal([x2,y2], [[3.0, 0.5], [0.5, 0.1]])
-        #self.rv3 = multivariate_normal([-0.5, +0.5], [[2.0, 0.3], [0.3, 0.5]])
-
-        self.samples1 = self.rv1.rvs(size=10)
-        self.samples2 = self.rv2.rvs(size=10)
-        #self.samples3 = self.rv3.rvs(size=10)
-
-        #fig = plt.figure()
-        #gs = gridspec.GridSpec(1,1)
-        #ax = {}
-
-        #ax[0] = fig.add_subplot(gs[0,0])
-        fig = px.scatter(x=self.samples1[:,0],y=self.samples1[:,1],color_discrete_sequence=['blue'])
-        fig = px.scatter(x=self.samples2[:,0],y=self.samples2[:,1],color_discrete_sequence=['red'])
-        fig.update_traces(marker_size=10)
-        fig.update_yaxes(range = [-4,4])
-        fig.update_xaxes(range = [-4,4])
-        #ax[0].scatter(self.samples3[:,0],self.samples3[:,1],s=3,c='g')
-
-        return fig
+        X, y = make_classification(n_features=2, n_redundant=0, n_informative=2,
+                                   random_state=1, n_clusters_per_class=1)
     
     def preprocessing(self,pre_option):
         return None

@@ -1,5 +1,5 @@
 # This script initializes MVPA journal club app using streamlit.
-# The multipage-layout is taken from 
+# The multipage-layout is taken from https://github.com/upraneelnihar/streamlit-multiapps
 # Author: Sara Bonati (Plasticity group - FB-LIP @ MPI Berlin)
 #----------------------------------------------------------------
 
@@ -10,13 +10,14 @@ import os
 import streamlit as st
 
 # import specific apps
-from apps import home,ml_basics
+from apps import home,preprocessing,classifiers
 from multiapp import MultiApp
 
 app = MultiApp()
 
 # Add all apps here
 app.add_app("Home", home.app)
-app.add_app("ML 101", ml_basics.app)
+app.add_app("Preprocessing", preprocessing.app)
+app.add_app("Classifiers", classifiers.app)
 
 app.run()
