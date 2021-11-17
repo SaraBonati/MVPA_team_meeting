@@ -10,7 +10,7 @@ import os
 import streamlit as st
 
 # import specific apps
-from apps import home,preprocessing,classifiers
+from apps import home,preprocessing,metrics
 from multiapp import MultiApp
 
 app = MultiApp()
@@ -18,6 +18,6 @@ app = MultiApp()
 # Add all apps here
 app.add_app("Home", home.app)
 app.add_app("Preprocessing", preprocessing.app)
-app.add_app("Classifiers", classifiers.app)
+app.add_app("Classify and evaluate", metrics.app)
 
 app.run()

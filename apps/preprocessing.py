@@ -21,11 +21,11 @@ def app():
     # initalize preprocessing obj
     P = Preprocessing(df_name)
     # info on data
-    X,y = P.load_dataset()
+    P.load_dataset()
 
     st.markdown("<p style='text-align: center;'>How does the dataset look like? \
                     What's the correlation between different features? </p>", unsafe_allow_html=True)
-    st.dataframe(X.head(10))
+    st.dataframe(P.data.head(10))
     # plot of feature correlation matrix
     st.pyplot(P.plot_corr_matrix())
 
