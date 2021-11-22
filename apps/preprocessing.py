@@ -3,7 +3,7 @@ import streamlit as st
 import seaborn as sns
 import pandas as pd
 import os
-from .utilities import Classifier, Preprocessing
+from .utilities import Classifier
 
 # directory management
 wdir = os.getcwd()
@@ -14,21 +14,27 @@ def app():
     
     # choose dataset
     st.markdown("<p style='text-align: center;'>Let's first select a dataset: \
-                each of these datasets is more suited to show some common preprocessing issues/steps</p>", unsafe_allow_html=True)
-    df_name = st.selectbox( 'Which dataset would you like to choose?', ('Diabetes Dataset',
-                                                                        'California Housing Dataset',
-                                                                        'Breast Cancer Wisconsin Dataset'))
-    # initalize preprocessing obj
-    P = Preprocessing(df_name)
+                we'll look at the Breast Cancer Wisconsin Dataset</p>", unsafe_allow_html=True)
+    
+    # initalize preprocessing classifier
+    C = Classifier()
     # info on data
-    P.load_dataset()
+    C.load_dataset('Breast Cancer Wisconsin Dataset')
 
     st.markdown("<p style='text-align: center;'>How does the dataset look like? \
                     What's the correlation between different features? </p>", unsafe_allow_html=True)
-    st.dataframe(P.data.head(10))
+    
     # plot of feature correlation matrix
-    st.pyplot(P.plot_corr_matrix())
+    st.dataframe(C.data.head(10))
+    st.pyplot(C.plot_corr_matrix())
+    st.pyplot(C.features_plot())
+        
+    st.markdown("<p style='text-align: center;'> What if we apply PCA? </p>", unsafe_allow_html=True)
+    st.pyplot(C.pca_demo('num'))
 
+    #st.markdown("<p style='text-align: center;'> Here's a visual example of PCA </p>", unsafe_allow_html=True)
+    #st.pyplot(P.pca_demo()[0])
+    #st.pyplot(P.pca_demo()[1])
 
 
 
