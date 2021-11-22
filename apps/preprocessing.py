@@ -32,10 +32,6 @@ def app():
     st.markdown("<p style='text-align: center;'> What if we apply PCA? </p>", unsafe_allow_html=True)
     st.pyplot(C.pca_demo('num'))
 
-    #st.markdown("<p style='text-align: center;'> Here's a visual example of PCA </p>", unsafe_allow_html=True)
-    #st.pyplot(P.pca_demo()[0])
-    #st.pyplot(P.pca_demo()[1])
-
 
 
 
